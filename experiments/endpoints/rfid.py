@@ -2,7 +2,7 @@ import datetime
 from django.conf import settings
 from django.http.response import HttpResponse
 from broker.providers.endpoint import EndpointProvider
-from experiments.models import RfidScanner, RfidRead
+from experiments.models import RfidScanner, RfidTag, RfidRead
 from broker.utils import basicauth
 
 
@@ -16,7 +16,7 @@ class RfidEndpoint(EndpointProvider):
         if tagid is None or devid is None:
             return HttpResponse('tagid and devid are mandatory GET parameters', status=400)
         rs, created = RfidScanner.objects.get_or_create(devid=devid)
-        rr = RfidRead(rfidscanner=rs, tagid=tagid)
+        rt, created = RfidTag.objects.get_or_create(tagid=tagid)
+        rr = RfidRead(rfidscanner=rs, rfidtag=rt)
         rr.save()
-        print(devid, tagid)
         return HttpResponse('OK', content_type='text/plain')

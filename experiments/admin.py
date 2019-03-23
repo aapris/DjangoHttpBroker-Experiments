@@ -10,7 +10,7 @@ admin.site.register(RfidScanner, RfidScannerAdmin)
 
 
 class RfidReadAdmin(admin.ModelAdmin):
-    list_display = ('rfidscanner', 'tagid', 'scanned_at')
+    list_display = ('rfidscanner', 'rfidtag', 'scanned_at')
 
 
 admin.site.register(RfidRead, RfidReadAdmin)

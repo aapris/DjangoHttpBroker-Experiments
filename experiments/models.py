@@ -15,10 +15,20 @@ class RfidScanner(models.Model):
         return f'{self.devid} ({self.name})'
 
 
+class RfidTag(models.Model):
+    tagid = models.CharField(db_index=True, max_length=256)
+    name = models.CharField(max_length=256, blank=True)
+    reads = models.ManyToManyField('RfidScanner',
+                                   blank=True,
+                                   through="RfidRead",
+                                   related_name="related_rfidtags",
+                                   verbose_name="RFID Tag reads")
+
+    def __str__(self):
+        return f'{self.tagid} {self.name}'
+
+
 class RfidRead(models.Model):
     rfidscanner = models.ForeignKey(RfidScanner, on_delete=models.CASCADE)
-    tagid = models.CharField(db_index=True, max_length=256)
+    rfidtag = models.ForeignKey(RfidTag, on_delete=models.CASCADE)
     scanned_at = models.DateTimeField(auto_now_add=True)
-
-    # def __str__(self):
-    #     return f'{self.datalogger} -> {self.forward}'
